@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Request } from "express";
+import type { Request as ExpressRequest } from "express";
 import type { User } from "../../drizzle/schema";
 import * as db from "../db";
 import { ENV } from "./env";
@@ -21,7 +21,7 @@ export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
 });
 
 class SupabaseAuthService {
-  async authenticateRequest(req: Request): Promise<User> {
+  async authenticateRequest(req: ExpressRequest): Promise<User> {
     // Get the Authorization header
     const authHeader = req.headers.authorization;
 

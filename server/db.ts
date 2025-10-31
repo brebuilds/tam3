@@ -93,7 +93,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.lastSignedIn = new Date();
     }
 
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
+    await db.insert(users).values(values).onConflictDoUpdate({
+      target: users.id,
       set: updateSet,
     });
   } catch (error) {
@@ -296,16 +297,16 @@ export async function createProduct(data: InsertProduct): Promise<Product> {
   if (!db) throw new Error("Database not available");
 
   const { nanoid } = await import("nanoid");
-  const id = nanoid();
+  const productId = nanoid();
 
   await db.insert(products).values({
-    id,
+    id: productId,
     ...data,
     created_at: new Date(),
     updated_at: new Date(),
   });
 
-  const product = await getProductById(id);
+  const product = await getProductById(productId);
   if (!product) throw new Error("Failed to create product");
 
   return product;
@@ -449,16 +450,16 @@ export async function createVendor(data: InsertVendor): Promise<Vendor> {
   if (!db) throw new Error("Database not available");
 
   const { nanoid } = await import("nanoid");
-  const id = nanoid();
+  const vendorId = nanoid();
 
   await db.insert(vendors).values({
-    id,
+    id: vendorId,
     ...data,
     created_at: new Date(),
     updated_at: new Date(),
   });
 
-  const vendor = await getVendorById(id);
+  const vendor = await getVendorById(vendorId);
   if (!vendor) throw new Error("Failed to create vendor");
 
   return vendor;
