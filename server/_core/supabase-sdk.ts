@@ -41,13 +41,14 @@ class SupabaseAuthService {
     const signedInAt = new Date();
     let user = await db.getUser(supabaseUser.id);
 
-    // If user not in DB, create them
+    // If user not in DB, create them as admin (first user gets full access!)
     if (!user) {
       await db.upsertUser({
         id: supabaseUser.id,
         name: supabaseUser.user_metadata?.name || supabaseUser.email?.split('@')[0] || null,
         email: supabaseUser.email ?? null,
         loginMethod: 'email',
+        role: 'admin', // Give new users admin access
         lastSignedIn: signedInAt,
       });
       user = await db.getUser(supabaseUser.id);
