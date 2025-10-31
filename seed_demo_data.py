@@ -11,6 +11,7 @@ from psycopg2.extras import execute_values
 from datetime import datetime, timedelta
 import random
 import string
+import json
 
 def generate_id():
     """Generate a unique ID"""
@@ -187,15 +188,15 @@ Pizza party this Friday to celebrate! 🍕''',
         
         cur.execute("""
             INSERT INTO posts (
-                id, type, title, content, tags, "isPinned", 
-                "externalLink", "createdBy", "createdAt", "updatedAt"
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                id, type, title, content, tags, is_pinned, 
+                external_link, author_id, created_at, updated_at
+            ) VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s)
         """, (
             post_id,
             post_data['type'],
             post_data['title'],
             post_data['content'],
-            post_data['tags'],
+            json.dumps(post_data['tags']),
             post_data['is_pinned'],
             post_data.get('external_link'),
             user_id,
@@ -222,8 +223,8 @@ Pizza party this Friday to celebrate! 🍕''',
             comment_id = generate_id()
             cur.execute("""
                 INSERT INTO comments (
-                    id, "commentableId", "commentableType", content,
-                    "userId", "createdAt"
+                    id, commentable_id, commentable_type, content,
+                    author_id, created_at
                 ) VALUES (%s, %s, %s, %s, %s, %s)
             """, (
                 comment_id,
@@ -241,79 +242,27 @@ Pizza party this Friday to celebrate! 🍕''',
     
     documents = [
         {
-            'title': 'Turbocharger Rebuild Procedure',
-            'category': 'equipment_manual',
-            'description': 'Step-by-step guide for rebuilding common rail turbochargers',
-            'content': '''# Turbocharger Rebuild Procedure
-
-## Safety First
-- Always wear safety glasses
-- Use proper lifting equipment (turbos can be heavy!)
-- Work in well-ventilated area
-
-## Tools Required
-- Torque wrench
-- Dial indicator
-- Bearing puller
-- Press
-
-## Step-by-Step Process
-1. **Disassembly** - Remove compressor and turbine wheels
-2. **Inspection** - Check all components for wear
-3. **Cleaning** - Ultrasonic clean all parts
-4. **Reassembly** - Install new bearings and seals
-5. **Balancing** - Critical! Must be within spec
-6. **Testing** - Spin test and leak check''',
+            'title': 'Turbocharger Rebuild Procedure - Training Video',
+            'category': 'training_video',
+            'description': 'Step-by-step training video for rebuilding common rail turbochargers',
+            'file_url': '/docs/turbo-rebuild-guide.pdf',
+            'file_type': 'pdf',
             'tags': ['Turbo', 'Rebuild', 'Procedure', 'Technical'],
         },
         {
             'title': 'Common DPF Fault Codes - Quick Reference',
             'category': 'faq',
-            'description': 'Quick reference guide for DPF-related fault codes',
-            'content': '''# DPF Fault Codes Quick Reference
-
-## P2002 - DPF Efficiency Below Threshold
-**Cause:** Filter may be plugged or damaged
-**Fix:** Check back pressure, forced regen, or replace
-
-## P244A - DPF Differential Pressure Too Low  
-**Cause:** Broken DPF substrate or sensor issue
-**Fix:** Inspect filter physically, check sensor
-
-## P2463 - DPF Soot Accumulation
-**Cause:** Failed regeneration cycles
-**Fix:** Forced regen, check DOC function
-
-## P20E8 - Reductant Level Too Low
-**Cause:** DEF tank low or quality issue
-**Fix:** Fill DEF, check for contamination''',
+            'description': 'Quick reference guide for DPF-related fault codes and solutions',
+            'file_url': '/docs/dpf-fault-codes.pdf',
+            'file_type': 'pdf',
             'tags': ['DPF', 'Diagnostics', 'Fault Codes'],
         },
         {
-            'title': 'Safety Data Sheet - Diesel Fuel',
+            'title': 'Safety Data Sheet - Diesel Fuel Handling',
             'category': 'safety_guideline',
-            'description': 'SDS for #2 Diesel Fuel handling',
-            'content': '''# Safety Data Sheet - Diesel Fuel
-
-## Hazards
-- Flammable liquid
-- May cause skin irritation
-- Harmful if swallowed
-
-## Personal Protection
-- Safety glasses required
-- Chemical-resistant gloves
-- Work in ventilated area
-
-## First Aid
-- Skin contact: Wash with soap and water
-- Eye contact: Rinse 15 minutes, seek medical attention
-- Ingestion: DO NOT induce vomiting, call poison control
-
-## Spill Procedures
-1. Contain spill
-2. Absorb with appropriate material
-3. Dispose per regulations''',
+            'description': 'SDS for #2 Diesel Fuel handling and emergency procedures',
+            'file_url': '/docs/diesel-fuel-sds.pdf',
+            'file_type': 'pdf',
             'tags': ['Safety', 'SDS', 'Diesel Fuel'],
         },
     ]
@@ -323,16 +272,17 @@ Pizza party this Friday to celebrate! 🍕''',
         
         cur.execute("""
             INSERT INTO documents (
-                id, title, category, description, content, tags,
-                "createdBy", "createdAt", "updatedAt"
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                id, title, category, description, file_url, file_type, tags,
+                uploaded_by, created_at, updated_at
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb, %s, %s, %s)
         """, (
             doc_id,
             doc_data['title'],
             doc_data['category'],
             doc_data['description'],
-            doc_data['content'],
-            doc_data['tags'],
+            doc_data['file_url'],
+            doc_data['file_type'],
+            json.dumps(doc_data['tags']),
             user_id,
             datetime.now() - timedelta(days=random.randint(0, 60)),
             datetime.now(),
