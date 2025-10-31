@@ -1,4 +1,5 @@
-import express from "express";
+import "dotenv/config";
+import express, { Request, Response } from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "../server/routers";
 import { createContext } from "../server/_core/context";
@@ -11,7 +12,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // tRPC API endpoint
 app.use(
-  "/api",
+  "/api/trpc",
   createExpressMiddleware({
     router: appRouter,
     createContext,
@@ -19,7 +20,7 @@ app.use(
 );
 
 // Health check
-app.get("/api/health", (_req, res) => {
+app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
