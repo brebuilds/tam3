@@ -292,7 +292,7 @@ export async function getLowStockProducts(limit: number = 50): Promise<Product[]
   return lowStock.slice(0, limit);
 }
 
-export async function createProduct(data: InsertProduct): Promise<Product> {
+export async function createProduct(data: Omit<InsertProduct, 'id'>): Promise<Product> {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
@@ -445,7 +445,7 @@ export async function getVendorById(id: string): Promise<Vendor | undefined> {
   return result[0];
 }
 
-export async function createVendor(data: InsertVendor): Promise<Vendor> {
+export async function createVendor(data: Omit<InsertVendor, 'id'>): Promise<Vendor> {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
