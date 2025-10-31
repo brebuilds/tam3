@@ -21,7 +21,20 @@ app.use(
 
 // Health check
 app.get("/api/health", (_req: Request, res: Response) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
+  res.json({ 
+    status: "ok", 
+    timestamp: new Date().toISOString(),
+    env: {
+      hasDatabase: !!process.env.DATABASE_URL,
+      hasSupabaseUrl: !!process.env.VITE_SUPABASE_URL,
+      hasSupabaseKey: !!process.env.VITE_SUPABASE_ANON_KEY,
+    }
+  });
+});
+
+// Simple test endpoint
+app.get("/api/test", (_req: Request, res: Response) => {
+  res.json({ message: "API is working!" });
 });
 
 export default app;
