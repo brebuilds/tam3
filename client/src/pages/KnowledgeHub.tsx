@@ -361,7 +361,6 @@ function DocumentDetailDialog({ documentId, open, onClose }: { documentId: strin
           )}
 
           {/* Meta Info */}
-          {(
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-muted-foreground">Views</p>
@@ -388,7 +387,6 @@ function DocumentDetailDialog({ documentId, open, onClose }: { documentId: strin
               </div>
             )}
           </div>
-          ) as React.ReactNode}
 
           {/* Actions */}
           {document.file_url && !isVideo && (
