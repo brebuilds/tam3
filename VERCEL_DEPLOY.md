@@ -7,14 +7,14 @@ This guide will help you deploy your Diesel Industry Hub to Vercel in under 10 m
 ## ✅ Prerequisites
 
 - [ ] Supabase account with your database and auth set up
-- [ ] GitHub repository with your code pushed (`brebuilds/tamtam`)
+- [ ] GitHub repository with your code pushed (`brebuilds/tam3`)
 - [ ] Vercel account (free tier works great!)
 
 ---
 
 ## 📦 Step 1: Push Your Code to GitHub
 
-Your code is already on GitHub at `brebuilds/tamtam` - you're all set!
+Your code is already on GitHub at `brebuilds/tam3` - you're all set! ✅
 
 ---
 
@@ -24,7 +24,7 @@ Your code is already on GitHub at `brebuilds/tamtam` - you're all set!
 
 1. Go to [vercel.com](https://vercel.com)
 2. Click **"Add New Project"**
-3. Import your GitHub repository: `brebuilds/tamtam`
+3. Import your GitHub repository: `brebuilds/tam3`
 4. Vercel will auto-detect the configuration ✅
 5. Click **"Deploy"** (we'll add environment variables next)
 
