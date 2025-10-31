@@ -173,7 +173,7 @@ export default function PurchaseOrders() {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <StatusBadge status={po.status} />
+                          <StatusBadge status={po.status || 'draft'} />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <span className="text-sm font-semibold text-white">

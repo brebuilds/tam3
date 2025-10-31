@@ -195,8 +195,11 @@ export const appRouter = router({
         notes: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        const { id, ...data } = input;
-        return await db.updatePurchaseOrder(id, data);
+        const { id, actual_delivery_date, ...data } = input;
+        return await db.updatePurchaseOrder(id, {
+          ...data,
+          ...(actual_delivery_date && { actual_delivery_date: new Date(actual_delivery_date) }),
+        });
       }),
   }),
 
@@ -261,7 +264,7 @@ export const appRouter = router({
       .input(z.object({
         templateId: z.string(),
         productId: z.string().optional(),
-        data: z.record(z.any()),
+        data: z.record(z.string(), z.any()),
       }))
       .mutation(async ({ input, ctx }) => {
         return await db.submitForm({

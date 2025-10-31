@@ -137,10 +137,10 @@ export default function Forms() {
                           Form Submission
                         </div>
                         <div className="text-xs text-gray-400">
-                          {new Date(sub.submittedAt).toLocaleDateString()}
+                          {sub.submittedAt ? new Date(sub.submittedAt).toLocaleDateString() : 'N/A'}
                         </div>
                       </div>
-                      <StatusBadge status={sub.status} />
+                      <StatusBadge status={sub.status || 'submitted'} />
                     </div>
                   </Card>
                 ))

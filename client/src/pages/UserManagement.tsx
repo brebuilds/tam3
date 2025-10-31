@@ -178,7 +178,7 @@ export default function UserManagement() {
         <EditUserDialog
           user={editingUser}
           onClose={() => setEditingUser(null)}
-          onSave={(role) => {
+          onSave={(role: "admin" | "manager" | "shop_floor" | "sales" | "readonly") => {
             updateUserRole.mutate({ userId: editingUser.id, role });
           }}
         />

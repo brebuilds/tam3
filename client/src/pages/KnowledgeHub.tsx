@@ -361,20 +361,21 @@ function DocumentDetailDialog({ documentId, open, onClose }: { documentId: strin
           )}
 
           {/* Meta Info */}
+          {(
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-muted-foreground">Views</p>
-              <p className="font-semibold">{document.view_count || 0}</p>
+              <p className="font-semibold">{Number(document.view_count) || 0}</p>
             </div>
             <div>
               <p className="text-muted-foreground">Downloads</p>
-              <p className="font-semibold">{document.download_count || 0}</p>
+              <p className="font-semibold">{Number(document.download_count) || 0}</p>
             </div>
             {document.duration && (
               <div>
                 <p className="text-muted-foreground">Duration</p>
                 <p className="font-semibold">
-                  {Math.floor(document.duration / 60)}:{String(document.duration % 60).padStart(2, '0')}
+                  {Math.floor(Number(document.duration) / 60)}:{String(Number(document.duration) % 60).padStart(2, '0')}
                 </p>
               </div>
             )}
@@ -382,11 +383,12 @@ function DocumentDetailDialog({ documentId, open, onClose }: { documentId: strin
               <div>
                 <p className="text-muted-foreground">File Size</p>
                 <p className="font-semibold">
-                  {(document.file_size / (1024 * 1024)).toFixed(2)} MB
+                  {(Number(document.file_size) / (1024 * 1024)).toFixed(2)} MB
                 </p>
               </div>
             )}
           </div>
+          ) as React.ReactNode}
 
           {/* Actions */}
           {document.file_url && !isVideo && (
@@ -397,7 +399,7 @@ function DocumentDetailDialog({ documentId, open, onClose }: { documentId: strin
           )}
 
           {/* Tags */}
-          {document.tags && document.tags.length > 0 && (
+          {document.tags && Array.isArray(document.tags) && document.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {document.tags.map((tag: string) => (
                 <Badge key={tag} variant="secondary">{tag}</Badge>
